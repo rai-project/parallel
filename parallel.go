@@ -49,7 +49,7 @@ func (parallel *ParallelImpl) loop() {
 	defer func() {
 		if r := recover(); r != nil {
 			log.WithField("uuid", parallel.uuid).
-				WithField("stack", debug.Stack()).
+				WithField("stack", string(debug.Stack())).
 				WithField("recover", r).
 				Error("panic")
 
@@ -74,8 +74,8 @@ func (parallel *ParallelImpl) loop() {
 }
 
 func (p *ParallelImpl) Add(task Task) {
-	p.tasks <- task
 	p.wg.Add(1)
+	p.tasks <- task
 }
 
 func (p *ParallelImpl) Start() Parallel {
@@ -106,6 +106,7 @@ func New(max int) Parallel {
 	return &ParallelImpl{
 		uuid:        uuid.NewV4(),
 		maxRoutines: max,
+		looping:     false,
 		tasks:       make(chan Task, 1000),
 	}
 }
