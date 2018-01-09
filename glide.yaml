@@ -1,0 +1,6 @@
+package: github.com/rai-project/parallel
+import:
+- package: github.com/rai-project/config
+- package: github.com/rai-project/logger
+- package: github.com/rai-project/uuid
+- package: github.com/sirupsen/logrus
